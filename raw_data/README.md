@@ -1,0 +1,1 @@
+I could not find the full HA sequence for A/Mississippi/1985, only the HA1 sequence, so I am removing it from the analysis.

@@ -1,0 +1,27 @@
+body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr auto;
+    grid-template-areas: 
+        "phylogram umap";
+    height: 100vh;
+    font-family: 'Lato', sans-serif;
+}
+#phylogram {
+    grid-area: phylogram;
+}
+
+#umap {
+    grid-area: umap;
+}
+
+.tooltip {
+    position: absolute;
+    text-align: left;
+    padding: 8px;
+    font: 12px sans-serif;
+    background: white;
+    border: 1px solid black;
+    border-radius: 8px;
+    pointer-events: none;
+  }
