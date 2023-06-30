@@ -35,28 +35,30 @@ function parseNewick(s) {
 
 // Load and process data
 Promise.all([
-    d3.csv('umap.csv'),
-    d3.text('tree.nwk'),
-    d3.csv('titers.csv'),
+    d3.csv('data/yang2022/umap.csv'),
+    d3.text('data/yang2022/yang2022_tree.nwk'),
+    d3.csv('data/yang2022/titers.csv'),
   ]).then(([umapData, treeData, titersData]) => {
     // Process tree data
     const root = parseNewick(treeData);
-    const tree = d3.cluster().size([400, 400])(d3.hierarchy(root, d => d.branchset));
     
-    // Get an array of all ic50 values across all samples
-    const allIc50s = titersData.map(d => +d.ic50);
+    const tree = d3.cluster().size([340, 200])
+      .separation((a, b) => 9)(d3.hierarchy(root, d => d.branchset));
 
-    // Compute the extent of all ic50 values
-    const ic50Extent = d3.extent(allIc50s);
+    // Get an array of all titer values across all samples
+    const allTiters = titersData.map(d => +d.log_hi_titer);
+
+    // Compute the extent of all titer values
+    const titerExtent = d3.extent(allTiters);
     
-    // Define your color scale using the overall ic50 extent
+    // Define your color scale using the overall titer extent
     const nodeColor = d3.scaleSequential()
-        .domain(ic50Extent)
-        .interpolator(d3.interpolateViridis);
+        .domain(titerExtent)
+        .interpolator(d3.interpolatePurples);
   
     // Generate Phylogenetic tree
     const treeSvg = d3.select('#phylogram').append('svg')
-        .attr('viewBox', [-50, 0, 550, 550]);  // provide extra space for labels
+        .attr('viewBox', [-100, -50, 550, 550]);  // provide extra space for labels
   
     // Draw lines connecting nodes (adjusted to be straight)
     treeSvg.selectAll('path')
@@ -68,24 +70,24 @@ Promise.all([
   
     // Draw nodes
     treeSvg.selectAll('circle')
-    .data(tree.descendants())
+    .data(tree.descendants().filter(d => !d.children)) // Only include leaf nodes
     .join('circle')
-    .attr('transform', d => `translate(${d.y},${d.x})`)
-    .attr('r', 5.5)
-    .attr('fill', '#D3D3D3')
-    .attr('stroke', 'black')
-    .attr('stroke-width', 0.9)
+      .attr('transform', d => `translate(${d.y},${d.x})`)
+      .attr('r', 5.5)
+      .attr('fill', 'white')
+      .attr('stroke', 'black')
+      .attr('stroke-width', 0.9)
     .on('mouseover', function(event, node) {
         if (selected !== null) {
             // Show tooltip
-            const titer = titersData.find(t => t.sample_name === selected.sample_name && t.virus_strain === node.data.name);
+            const titer = titersData.find(t => t.participant_id === selected.participant_id && t.strain === node.data.name);
             if (titer) {
                 tooltip.transition()
                     .duration(200)
                     .style('opacity', 1.0);
-                tooltip.html(`Sample Name: ${selected.sample_name}<br/>Virus Strain: ${node.data.name}<br/>IC50: ${titer.ic50}`)
-                    .style('left', (event.pageX) + 'px')
-                    .style('top', (event.pageY - 28) + 'px');
+                tooltip.html(`Participant ID: ${selected.participant_id}<br/>Strain: ${node.data.name}<br/>Log HI Titer: ${titer.log_hi_titer}`)
+                    .style('left', (event.pageX + 20) + 'px')
+                    .style('top', (event.pageY - 60) + 'px');
                 // Enlarge this node
                 d3.select(this)
                   .transition()
@@ -108,27 +110,26 @@ Promise.all([
 
     // Add node labels
     treeSvg.selectAll('text')
-        .data(tree.descendants())
+        .data(tree.descendants().filter(d => !d.children)) // Only include leaf nodes
         .join('text')
-          .attr('transform', d => `translate(${d.y},${d.x})`)
-          .attr('dy', '0.31em')
-          .attr('dx', '10')  // offset label from node
-          .text(d => d.data.name)
-          .style('font-size', '17px');
-    
+        .attr('transform', d => `translate(${d.y},${d.x})`)
+        .attr('dy', '0.31em')
+        .attr('dx', '10')  // offset label from node
+        .text(d => d.data.name)
+        .style('font-size', '13px');
+        
     // Generate UMAP
     const umapX = d3.scaleLinear()
       .domain(d3.extent(umapData, d => +d.UMAP1))
-      .range([90, 320]);  // adjust to fit in bounding box
+      .range([60, 330]);  // adjust to fit in bounding box
     
     const umapY = d3.scaleLinear()
       .domain(d3.extent(umapData, d => +d.UMAP2))
-      .range([320, 90]);  // adjust and invert to fit in bounding box
-  
-    const color = d3.scaleOrdinal(d3.schemeSet3);
-  
+      .range([330, 70]);  // adjust and invert to fit in bounding box
+    
     const umapSvg = d3.select('#umap').append('svg')
-        .attr('viewBox', [0, 0, 500, 500]);
+        .attr('viewBox', [0, 0, 500, 500])
+        .attr('transform', 'translate(-50, 0)'); 
   
     // Draw bounding box and axes
     umapSvg.append('rect')
@@ -153,30 +154,51 @@ Promise.all([
       .text('UMAP2');
 
     // Get unique group values
-    const groups = Array.from(new Set(umapData.map(d => d.group)));
+    const groups = Array.from(new Set(umapData.map(d => d.age_at_sampling)));
 
+    // Sort the groups
+    groups.sort();
+
+    // Define the number of discrete colors you want
+    let n = groups.length;
+
+    // Set color scale
+    const color = d3.scaleOrdinal()
+      .domain(groups)
+      .range(d3.schemeSpectral[n]);
+        
     // Add a legend group
     const legend = umapSvg.append('g')
-    .attr('transform', 'translate(365,55)');  // adjust position as needed
+        .attr('transform', 'translate(365,55)');  // adjust position as needed
 
+    // Add a title
+    legend.append('text')
+        .attr('x', 0)
+        .attr('y', 5)  // position at the top of the legend
+        .text('Age group')
+        .style('font-size', '15px')
+        .style('font-weight', 'bold');
+
+    // Adjust the y positions of rectangles and text labels to make room for the title
     // Add rectangles for each color
     legend.selectAll('rect')
-    .data(groups)
-    .join('rect')
-        .attr('x', 0)
-        .attr('y', (d, i) => i * 20)  // creates a vertical legend
-        .attr('width', 10)
-        .attr('height', 10)
-        .attr('fill', d => color(d));
+        .data(groups)
+        .join('rect')
+            .attr('x', 0)
+            .attr('y', (d, i) => (i * 20) + 20)  // Add 20 to create room for the title
+            .attr('width', 10)
+            .attr('height', 10)
+            .attr('fill', d => color(d));
 
     // Add text labels for each color
-    legend.selectAll('text')
-    .data(groups)
-    .join('text')
-        .attr('x', 15)  // offset from rectangle
-        .attr('y', (d, i) => i * 20 + 9)  // aligns text with rectangles
-        .text(d => d);
-
+    legend.selectAll('text:not(:first-child)')  // select all text elements except the first one (the title)
+        .data(groups)
+        .join('text')
+            .attr('x', 15)  // offset from rectangle
+            .attr('y', (d, i) => (i * 20) + 29)  // Add 20 to create room for the title
+            .text(d => d)
+            .style('font-size', '13px');
+    
     // Draw points and setup interactivity
     const tooltip = d3.select('body').append('div')
     .attr('class', 'tooltip')
@@ -189,18 +211,18 @@ Promise.all([
     .join('circle')
         .attr('cx', d => umapX(+d.UMAP1))
         .attr('cy', d => umapY(+d.UMAP2))
-        .attr('r', d => d === selected ? 10 : 5)
-        .attr('fill', d => color(d.group))
+        .attr('r', d => d === selected ? 10 : 3)
+        .attr('fill', d => color(d.age_at_sampling))
         .attr('stroke', 'black')
-        .attr('stroke-width', 0.9)
+        .attr('stroke-width', 0.5)
         .on('mouseover', function(event, d) {
             // Show tooltip
             tooltip.transition()
                 .duration(200)
                 .style('opacity', 1.0);
-            tooltip.html(d.sample_name)
+            tooltip.html(d.participant_id)
                 .style('left', (event.pageX) + 'px')
-                .style('top', (event.pageY - 28) + 'px');
+                .style('top', (event.pageY - 50) + 'px');
             // Highlight this point
             d3.select(this)
               .transition()
@@ -211,8 +233,8 @@ Promise.all([
             if (selected === null) {
                 treeSvg.selectAll('circle')
                     .attr('fill', node => {
-                    const titer = titersData.find(t => t.sample_name === d.sample_name && t.virus_strain === node.data.name);
-                    return titer ? nodeColor(+titer.ic50) : '#D3D3D3';
+                    const titer = titersData.find(t => t.participant_id === d.participant_id && t.strain === node.data.name);
+                    return titer ? nodeColor(+titer.log_hi_titer) : 'white';
                 });
             }
         })        
@@ -226,17 +248,17 @@ Promise.all([
                 d3.select(this)
                   .transition()
                   .duration(400)  // Adjust time in ms as needed
-                  .attr('r', 5.5);
+                  .attr('r', 3);
                 
                 // Uncolor tree nodes only if no point is selected
                 if (selected === null) {
                     treeSvg.selectAll('circle')
-                    .attr('fill', '#D3D3D3');
+                    .attr('fill', 'white');
                 }
             }
         })            
     .on('click', function(event, d) {
       selected = selected === d ? null : d;
-      points.attr('r', p => p === selected ? 10 : 5);
+      points.attr('r', p => p === selected ? 10 : 3);
     });
   });  

@@ -5,7 +5,7 @@ body {
     grid-template-areas: 
         "phylogram umap";
     height: 100vh;
-    font-family: 'Lato', sans-serif;
+    font-family: 'Source Sans Pro', sans-serif;
 }
 #phylogram {
     grid-area: phylogram;
