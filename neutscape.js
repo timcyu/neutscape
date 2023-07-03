@@ -258,9 +258,12 @@ Promise.all([
             }
         })            
     .on('click', function(event, d) {
-      selected = selected === d ? null : d;
-      points.attr('r', p => p === selected ? 10 : 3);
-    });
+      // If no point is selected, or the currently selected point is clicked again
+      if (selected === null || selected === d) {
+          selected = selected === d ? null : d;
+          points.attr('r', p => p === selected ? 10 : 3);
+      }
+    });  
   });  
 
 const instructionBtn = document.getElementById('instruction-btn');
