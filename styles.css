@@ -5,15 +5,42 @@ body {
     grid-template-areas: 
         "phylogram umap";
     height: 100vh;
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: 'Lato', sans-serif;
 }
 
-#logo {
+#logo-container {
     position: absolute;
-    top: -10px;
-    left: 10px;
-    width: 150px;
-    height: auto;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+}
+
+#logo-text {
+    font-size: 35px; 
+    font-weight: bold;
+    font-family: 'Mulish', sans-serif; 
+    margin-right: 50px;
+}
+
+#instruction-btn {
+    padding: 5px 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#instruction-box {
+    position: absolute;
+    top: 20px;  
+    left: 500px;  
+    width: 705px;
+    border: 1px solid black;
+    padding: 20px;
+    background-color: white;
+}
+
+.hidden {
+    display: none;
 }
 
 #phylogram {

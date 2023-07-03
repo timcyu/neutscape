@@ -262,3 +262,14 @@ Promise.all([
       points.attr('r', p => p === selected ? 10 : 3);
     });
   });  
+
+const instructionBtn = document.getElementById('instruction-btn');
+const instructionBox = document.getElementById('instruction-box');
+  
+instructionBtn.addEventListener('click', function() {
+    if (instructionBox.classList.contains('hidden')) {
+        instructionBox.classList.remove('hidden');
+    } else {
+        instructionBox.classList.add('hidden');
+    }
+});
