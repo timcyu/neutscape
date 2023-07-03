@@ -216,6 +216,8 @@ Promise.all([
         .attr('stroke', 'black')
         .attr('stroke-width', 0.5)
         .on('mouseover', function(event, d) {
+            // Move point to front
+            this.parentNode.appendChild(this);
             // Show tooltip
             tooltip.transition()
                 .duration(200)
