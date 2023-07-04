@@ -7,10 +7,22 @@
 <body>
   <div id="logo-container">
     <div id ="logo-text">Neutscape</div>
-    <button id="instruction-btn">Click here for description</button>
+    <button id="instruction-btn">ABOUT</button>
   </div>
   <div id="instruction-box" class="hidden">
-    <p><b>Neutscape</b> is an interactive visualization for antibody landscapes.</p>
+    <button id="exit-button" style="position: absolute; top: 5px; right: 5px;">X</button>
+    <p><b>Neutscape</b> is an interactive visualization for viral antibody landscapes.</p>
+    <p>An <b>antibody landscape</b> is a comprehensive view of how well an individual 
+      can neutralize viruses from the past, present, and future.
+      The term originates from <a href="10.1126/science.1256427" class="link">
+      Fonville et al</a>.  
+      It is measured by collecting serum from an individual and assaying for neutralization 
+      against historic panels of viruses.</p>
+    <p>Individual antibody landscapes reflect personal immune histories.
+      Aggregated antibody landscapes reveal population-level differences in antigenic
+      susceptibility which often corelate with age.
+      Therefore, these data can provide valuable clues on what drives us to be susceptible or
+      immune.</p>
   </div>
   <div id="phylogram">
     <svg></svg>

@@ -1,3 +1,8 @@
+a.link {
+    color: #0563c1; 
+    text-decoration: none; 
+  }
+
 body {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -17,26 +22,59 @@ body {
 }
 
 #logo-text {
-    font-size: 35px; 
+    font-size: calc(16px + 1.5vw); /* 16px is minimum font size */
     font-weight: bold;
-    font-family: 'Mulish', sans-serif; 
+    font-family: 'Avenir Next', sans-serif; 
     margin-right: 50px;
 }
 
 #instruction-btn {
-    padding: 5px 5px;
-    font-size: 16px;
+    padding: 5px 8px;
+    font-family: 'Avenir Next', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
     cursor: pointer;
+    background-color: white;
+    border: 2px solid black;
+}
+
+#instruction-btn:hover {
+    border: 2px solid #9897a9; 
+    color: #9897a9;
 }
 
 #instruction-box {
+    font-family: 'Avenir Next', sans-serif;
+    font-size: 18px;
     position: absolute;
-    top: 20px;  
-    left: 500px;  
-    width: 705px;
-    border: 1px solid black;
-    padding: 20px;
-    background-color: white;
+    top: 15%;
+    left: 7.5%;  
+    width: 70%;
+    height: 70%;
+    padding: 1%;
+    background-color: whitesmoke;
+    overflow: auto;
+    z-index: 1;
+    border: 2px solid black;
+    border-radius: 10px;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+#exit-button {
+    border: none; 
+    color: black;
+    background-color: whitesmoke;
+    font-size: 24px; /* Increase font size */
+    cursor: pointer; /* Add a pointer cursor on hover */
+    position: absolute;
+    font-family: 'Arial', sans-serif;
+    transform: scaleY(0.9);
+}
+
+#exit-button:hover {
+    color: #9897a9;
 }
 
 .hidden {
@@ -54,8 +92,8 @@ body {
 .tooltip {
     position: absolute;
     text-align: left;
-    padding: 8px;
-    font: 12px sans-serif;
+    padding: 5px;
+    font: 13px sans-serif;
     background: white;
     border: 1px solid black;
     border-radius: 8px;

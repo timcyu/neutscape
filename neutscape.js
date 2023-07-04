@@ -268,13 +268,36 @@ Promise.all([
     });  
   });  
 
-const instructionBtn = document.getElementById('instruction-btn');
-const instructionBox = document.getElementById('instruction-box');
-  
-instructionBtn.addEventListener('click', function() {
-    if (instructionBox.classList.contains('hidden')) {
-        instructionBox.classList.remove('hidden');
-    } else {
-        instructionBox.classList.add('hidden');
+// Get the instruction and exit buttons
+const instructionButton = document.querySelector('#instruction-btn');
+const exitButton = document.querySelector('#exit-button');
+
+// Get the instruction box
+const instructionBox = document.querySelector('#instruction-box');
+
+// Add an event listener for the instruction button
+instructionButton.addEventListener('click', () => {
+    if(getComputedStyle(instructionBox).opacity == '0'){
+        // Fade in the instruction box
+        instructionBox.style.display = 'block'; // Make the box visible
+        setTimeout(function(){ 
+            instructionBox.style.opacity = '1'; // Then start the fade in
+        }, 50); // This delay ensures display is set before we start the transition
     }
+    else {
+        // Fade out the instruction box
+        instructionBox.style.opacity = '0';
+        setTimeout(function(){ 
+            instructionBox.style.display = 'none'; // Then hide the box
+        }, 500); // This delay ensures the fade out completes before we hide the box
+    }
+});
+
+// Add an event listener for the exit button
+exitButton.addEventListener('click', () => {
+    // Fade out the instruction box
+    instructionBox.style.opacity = '0';
+    setTimeout(function(){ 
+        instructionBox.style.display = 'none'; // Then hide the box
+    }, 500); // This delay ensures the fade out completes before we hide the box
 });
