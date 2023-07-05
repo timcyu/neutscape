@@ -6,10 +6,12 @@ a.link {
 body {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: 1fr 1fr auto;
     grid-template-areas: 
+        "densitymap umap"
         "phylogram umap";
     height: 100vh;
+    overflow: hidden;
     font-family: 'Lato', sans-serif;
 }
 
@@ -79,6 +81,10 @@ body {
 
 .hidden {
     display: none;
+}
+
+#densitymap {
+    grid-area: densitymap;
 }
 
 #phylogram {
