@@ -18,6 +18,7 @@ body {
     height: 100vh;
     overflow: hidden;
     font-family: 'Lato', sans-serif;
+    grid-gap: 20px;
 }
 
 #logo-container {
@@ -90,14 +91,20 @@ body {
 
 #densitymap {
     grid-area: densitymap;
+    width: 650px;
+    height: 550px;
 }
 
 #phylogram {
     grid-area: phylogram;
+    width: 650px;
+    height: 650px;
 }
 
 #umap {
     grid-area: umap;
+    width: 600px;
+    height: 600px;
 }
 
 .tooltip {

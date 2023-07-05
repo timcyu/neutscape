@@ -55,6 +55,7 @@ Promise.all([
     d3.text('data/yang2022/yang2022_tree.nwk'),
     d3.csv('data/yang2022/titers.csv'),
   ]).then(([umapData, treeData, titersData]) => {
+
     // Process tree data
     const root = parseNewick(treeData);
     let strainOrder = getStrainOrder(root);
