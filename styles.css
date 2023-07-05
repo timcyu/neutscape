@@ -3,6 +3,11 @@ a.link {
     text-decoration: none; 
   }
 
+a.command {
+    color: #80004C;
+    font-weight: bold;
+}
+
 body {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -49,10 +54,10 @@ body {
     font-family: 'Avenir Next', sans-serif;
     font-size: 18px;
     position: absolute;
-    top: 15%;
-    left: 7.5%;  
-    width: 70%;
-    height: 70%;
+    top: 10%;
+    left: 17.5%;  
+    width: 60%;
+    height: 52%;
     padding: 1%;
     background-color: whitesmoke;
     overflow: auto;
