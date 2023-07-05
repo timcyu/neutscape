@@ -91,20 +91,20 @@ body {
 
 #densitymap {
     grid-area: densitymap;
-    width: 650px;
-    height: 550px;
+    width: 550px;
+    height: 500px;
 }
 
 #phylogram {
     grid-area: phylogram;
-    width: 650px;
-    height: 650px;
+    width: 550px;
+    height: 510px;
 }
 
 #umap {
     grid-area: umap;
-    width: 600px;
-    height: 600px;
+    width: 500px;
+    height: 500px;
 }
 
 .tooltip {

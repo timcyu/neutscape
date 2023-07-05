@@ -237,7 +237,7 @@ Promise.all([
     
     const umapSvg = d3.select('#umap').append('svg')
         .attr('viewBox', [0, 0, 450, 400])
-        .attr('transform', 'translate(-100, -115)'); 
+        .attr('transform', 'translate(-250, -100)'); 
   
     // Draw bounding box and axes
     umapSvg.append('rect')
