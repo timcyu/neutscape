@@ -30,7 +30,7 @@ body {
 }
 
 #logo-text {
-    font-size: calc(16px + 1.5vw); /* 16px is minimum font size */
+    font-size: calc(2px + 1vw); /* 16px is minimum font size */
     font-weight: bold;
     font-family: 'Avenir Next', sans-serif; 
     margin-right: 50px;
